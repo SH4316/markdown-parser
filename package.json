@@ -1,9 +1,17 @@
 {
   "name": "markdown-parser",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "type": "module",
+  "license" : "MIT",
+  "author": "SH4316",
+  "homepage": "https://github.com/SH4316/markdown-parser",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/SH4316/markdown-parser.git"
+  },
   "scripts": {
-    "test": "bun test"
+    "test": "bun test", 
+    "build": ""
   },
   "devDependencies": {
     "@types/bun": "latest"

@@ -432,6 +432,27 @@ export function parseBlocks(input: string): BlockParseResult {
         continue;
       }
 
+      // Check if next token is a thematicBreak that could be a setext underline
+      // According to CommonMark spec, setext heading takes precedence over thematic break
+      if (nextIdx < tokens.length && tokens[nextIdx].type === 'thematicBreak') {
+        const thematicToken = tokens[nextIdx];
+        // Only dashes can be setext underlines (not * or _)
+        if (/^-+\s*$/.test(thematicToken.raw)) {
+          const rawText = paragraphTokens.map((t) => t.content).join('\n');
+
+          const heading: Heading = {
+            type: 'heading',
+            depth: 2,
+            children: [],
+            position: makePosition(paragraphTokens[0], thematicToken),
+          };
+          (heading as any).rawText = rawText;
+          addChild(heading);
+          i = nextIdx + 1;
+          continue;
+        }
+      }
+
       if (paragraphTokens.length === 1) {
         const defResult = parseLinkDefinition(paragraphTokens[0].content);
         if (defResult) {

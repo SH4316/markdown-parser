@@ -28,6 +28,8 @@ TypeScript로 작성된 강력하고 가벼운 Markdown 파서입니다. Markdow
 | [docs/inline-parser.md](./docs/inline-parser.md) | 인라인 파싱 및 델리미터 스택 알고리즘 | 파서 구현에 관심 있는 개발자 |
 | [docs/architecture.md](./docs/architecture.md) | 2단계 파싱 아키텍처 개요 | 시스템 설계를 이해하고 싶은 개발자 |
 | [docs/api.md](./docs/api.md) | 완전한 API 레퍼런스 및 사용 예시 | 라이브러리 사용자 |
+| [docs/tests/status.md](./docs/tests/status.md) | 테스트 현황 및 커버리지 | 테스트 코드 기여자 |
+| [docs/tests/guide.md](./docs/tests/guide.md) | 테스트 작성 가이드 및 패턴 | 테스트 코드 기여자 |
 
 **빠른 선택 가이드:**
 - 라이브러리를 처음 사용하시나요? → [docs/api.md](./docs/api.md)에서 `parse()` 함수를 확인하세요.

@@ -69,6 +69,10 @@ function isAlphanumeric(char: string): boolean {
   return /[a-zA-Z0-9]/.test(char);
 }
 
+function isPunctuation(char: string): boolean {
+  return /[!"#$%&'()*+,\-./:;<=>?@\[\\\]^_`{|}~]/.test(char);
+}
+
 function scanCodeSpan(
   text: string,
   start: number
@@ -345,22 +349,32 @@ function parseLinkOrImage(
 
 function isLeftFlanking(text: string, pos: number, count: number): boolean {
   const after = text[pos + count];
+  // (1) not followed by whitespace
   if (!after || isWhitespace(after)) return false;
 
   const before = text[pos - 1];
-  if (!before || isWhitespace(before)) return true;
+  // (2a) not followed by punctuation
+  if (!isPunctuation(after)) return true;
 
-  return true;
+  // (2b) followed by punctuation AND preceded by whitespace/punctuation
+  if (!before || isWhitespace(before) || isPunctuation(before)) return true;
+
+  return false;
 }
 
 function isRightFlanking(text: string, pos: number, count: number): boolean {
   const before = text[pos - 1];
+  // (1) not preceded by whitespace
   if (!before || isWhitespace(before)) return false;
 
   const after = text[pos + count];
-  if (!after || isWhitespace(after)) return true;
+  // (2a) not preceded by punctuation
+  if (!isPunctuation(before)) return true;
 
-  return true;
+  // (2b) preceded by punctuation AND followed by whitespace/punctuation
+  if (!after || isWhitespace(after) || isPunctuation(after)) return true;
+
+  return false;
 }
 
 function canOpen(
@@ -639,4 +653,15 @@ function processEmphasis(nodes: PhrasingContent[], delimiters: Delimiter[]): voi
 
   nodes.length = 0;
   nodes.push(...filteredNodes);
+
+  // Merge adjacent text nodes
+  let i = 0;
+  while (i < nodes.length - 1) {
+    if (nodes[i].type === 'text' && nodes[i + 1].type === 'text') {
+      (nodes[i] as Text).value += (nodes[i + 1] as Text).value;
+      nodes.splice(i + 1, 1);
+    } else {
+      i++;
+    }
+  }
 }
